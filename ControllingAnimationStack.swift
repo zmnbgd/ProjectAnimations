@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         Button("Tap me") {
-            // do nothing
+
             enabled.toggle()
         }
         .frame(width: 200, height: 200)
