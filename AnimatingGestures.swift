@@ -8,8 +8,27 @@
 import SwiftUI
 
 struct AnimatingGestures: View {
+    
+    @State private var dragAmount = CGSize.zero
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            .frame(width: 300, height: 200)
+            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .offset(dragAmount)
+            .gesture(
+            DragGesture()
+                .onChanged { dragAmount = $0.translation }
+                .onEnded { _ in
+                    withAnimation {
+                        // explicite animation
+                    dragAmount = .zero
+                    }
+                }
+            )
+           // .animation(.spring(), value: dragAmount)
+        // implicit ainmation
+        
     }
 }
 
