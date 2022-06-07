@@ -480,3 +480,69 @@ struct ContentView: View {
 
 
 
+
+Showing and hiding views with transitions
+
+
+
+One of the most powerful features of SwiftUI is the ability to customize the way views are shown and hidden. Previously you’ve seen how we can use regular if conditions to include views conditionally, which means when that condition changes we can insert or remove views from our view hierarchy.
+
+Transitions control how this insertion and removal takes place, and we can work with the built-in transitions, combine them in different ways, or even create wholly custom transitions.
+
+To demonstrate this, here’s a VStack with a button and a rectangle:
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Button("Tap Me") {
+                // do nothing
+            }
+
+            Rectangle()
+                .fill(.red)
+                .frame(width: 200, height: 200)
+        }
+    }
+}
+
+We can make the rectangle appear only when a certain condition is satisfied. First, we add some state we can manipulate:
+
+@State private var isShowingRed = false
+
+Next we use that state as a condition for showing our rectangle:
+
+if isShowingRed {
+    Rectangle()
+        .fill(.red)
+        .frame(width: 200, height: 200)
+}
+
+Finally we can toggle isShowingRed between true and false in the button’s action:
+
+isShowingRed.toggle()
+
+If you run the program, you’ll see that pressing the button shows and hides the red square. There’s no animation; it just appears and disappears abruptly.
+
+We can get SwiftUI’s default view transition by wrapping the state change using withAnimation(), like this:
+
+withAnimation {
+    isShowingRed.toggle()
+}
+
+With that small change, the app now fades the red rectangle in and out, while also moving the button up to make space. It looks OK, but we can do better with the transition() modifier.
+
+For example, we could have the rectangle scale up and down as it is shown just by adding the transition() modifier to it:
+
+Rectangle()
+    .fill(.red)
+    .frame(width: 200, height: 200)
+    .transition(.scale)
+
+Now tapping the button looks much better: the rectangle scales up as the button makes space, then scales down when tapped again.
+
+There are a handful of other transitions you can try if you want to experiment. A useful one is .asymmetric, which lets us use one transition when the view is being shown and another when it’s disappearing. To try it out, replace the rectangle’s existing transition with this:
+
+.transition(.asymmetric(insertion: .scale, removal: .opacity))
+
+
+
